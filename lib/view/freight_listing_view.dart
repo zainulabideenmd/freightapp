@@ -153,7 +153,6 @@ class _FreightListingViewState extends State<FreightListingView> {
 
   @override
   void dispose() {
-    controller.dispose();
     super.dispose();
   }
 }
