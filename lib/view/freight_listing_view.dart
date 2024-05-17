@@ -32,24 +32,29 @@ class _FreightListingViewState extends State<FreightListingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.black,
         toolbarHeight: 120,
         centerTitle: false,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("Let's track your freight.",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white)),
-            20.0.vSpace(),
-            AppFormField(
-              prefixIcon: const Icon(CupertinoIcons.search),
-              fillColor: Colors.white,
-              hint: AppStrings.searchHint,
-            )
-          ],
+        title: Container(
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text("Let's track your freight.",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white)),
+              20.0.vSpace(),
+              AppFormField(
+                prefixIcon: const Icon(CupertinoIcons.search),
+                fillColor: Colors.white,
+                hint: AppStrings.searchHint,
+              )
+            ],
+          ),
         ),
       ),
       body: Obx(

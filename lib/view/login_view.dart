@@ -53,7 +53,7 @@ class LoginView extends StatelessWidget {
                           authController.loginEmailTxtCn.text,
                           authController.loginPwdTxtCn.text);
                       if (isValiduser == true) {
-                        AppRoutes.go(AppRouteName.freightView);
+                        AppRoutes.pushAndRemoveUntil(AppRouteName.freightView);
                       } else {
                         Get.snackbar(
                             "Validation Error", "Invalid User Credentials");
