@@ -7,6 +7,7 @@ import 'package:freight_delivery_app/utilities/app_colors.dart';
 import 'package:freight_delivery_app/utilities/app_images.dart';
 import 'package:freight_delivery_app/utilities/app_routes.dart';
 import 'package:freight_delivery_app/utilities/app_strings.dart';
+import 'package:freight_delivery_app/view/freight_detail_view.dart';
 import 'package:get/get.dart';
 
 import '../controllers/freight_list_controller.dart';
@@ -57,8 +58,12 @@ class _FreightListingViewState extends State<FreightListingView> {
             itemCount: controller.freightList.length,
             itemBuilder: (context, position) {
               return InkWell(
+                key: ValueKey("item->$position"),
                 onTap: (){
-                  AppRoutes.go(AppRouteName.freightDetailView,arguments: {"selectedIndex":position});
+                  Navigator.push(
+                      context,
+                  MaterialPageRoute(builder:(context) => FreightDetailView(selectedIndex: position,)));
+                  // AppRoutes.go(AppRouteName.freightDetailView,arguments: {"selectedIndex":position});
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),

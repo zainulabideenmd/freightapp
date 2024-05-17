@@ -88,6 +88,7 @@ class _FreightDetailViewState extends State<FreightDetailView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        key: ValueKey("detailPage"),
         title:
             Text(controller.freightList[widget.selectedIndex!].bookingId ?? ""),
       ),
