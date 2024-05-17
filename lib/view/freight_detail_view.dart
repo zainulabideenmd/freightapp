@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:freight_delivery_app/controllers/freight_list_controller.dart';
 import 'package:freight_delivery_app/extensions.dart' as extensions;
+import 'package:freight_delivery_app/utilities/app_state.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -88,9 +88,53 @@ class _FreightDetailViewState extends State<FreightDetailView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          Container(
+            padding: EdgeInsets.all(10),
+            child: MaterialButton(
+              onPressed: () {
+                Get.bottomSheet(Container(
+                  width: AppState.instance.getScreenWidth,
+                  height: 200,
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      InkWell(
+                          onTap: () {
+                            controller.freightList[widget.selectedIndex!]
+                                .currentStatus = "In Transit";
+                            controller.freightList.refresh();
+                            Get.back();
+                          },
+                          child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Text("In Transit"))),
+                      InkWell(
+                          onTap: () {
+                            controller.freightList[widget.selectedIndex!]
+                                .currentStatus = "Delivered";
+                            controller.freightList.refresh();
+                            Get.back();
+                          },
+                          child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Text("Delivered"))),
+                    ],
+                  ),
+                ));
+              },
+              child: Text(
+                "Update Status",
+                style: TextStyle(color: Colors.white),
+              ),
+              color: Colors.black,
+            ),
+          )
+        ],
         key: ValueKey("detailPage"),
-        title:
-            Text(controller.freightList[widget.selectedIndex!].bookingId ?? ""),
+        title: FittedBox(
+            child: Text(
+                controller.freightList[widget.selectedIndex!].bookingId ?? "")),
       ),
       body: CustomScrollView(
         slivers: [
@@ -145,119 +189,121 @@ class _FreightDetailViewState extends State<FreightDetailView> {
               ],
             ),
           ),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                        'Material : ${controller.freightList[widget.selectedIndex!].materialShipped}',
-                        style: TextStyle(fontWeight: FontWeight.w500))
-                  ],
+          Obx(
+              ()=> SliverList(
+              delegate: SliverChildListDelegate([
+                Container(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          'Material : ${controller.freightList[widget.selectedIndex!].materialShipped}',
+                          style: TextStyle(fontWeight: FontWeight.w500))
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [BoxShadow(color: AppColors.shadowColor)]),
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          AppImages.packageBoxSvg,
-                          width: 50,
-                        ),
-                        AppSpacing.vs10.hSpace(),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "#${controller.freightList[widget.selectedIndex!].bookingId}",
-                              style: const TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                                "${controller.freightList[widget.selectedIndex!].currentStatus} * ${controller.freightList[widget.selectedIndex!].actualEta}",
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  padding: const EdgeInsets.all(10),
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [BoxShadow(color: AppColors.shadowColor)]),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            AppImages.packageBoxSvg,
+                            width: 50,
+                          ),
+                          AppSpacing.vs10.hSpace(),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "#${controller.freightList[widget.selectedIndex!].bookingId}",
                                 style: const TextStyle(
-                                    color: AppColors.greyColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500))
-                          ],
-                        ),
-                        const Spacer(),
-                      ],
-                    ),
-                    20.0.vSpace(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "From",
-                                  style: TextStyle(fontWeight: FontWeight.w500),
-                                ),
-                                Text(
-                                  "${controller.freightList[widget.selectedIndex!].originLocation}",
+                                    fontSize: 14, fontWeight: FontWeight.w500),
+                              ),
+                              Text(
+                                  "${controller.freightList[widget.selectedIndex!].currentStatus} * ${controller.freightList[widget.selectedIndex!].actualEta}",
                                   style: const TextStyle(
                                       color: AppColors.greyColor,
                                       fontSize: 12,
-                                      fontWeight: FontWeight.w500),
-                                  softWrap: true,
-                                )
-                              ]),
-                        ),
-                        50.0.hSpace(),
-                        Expanded(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text("To",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w500)),
-                                Text(
-                                  "${controller.freightList[widget.selectedIndex!].destinationLocation}",
-                                  style: const TextStyle(
-                                      color: AppColors.greyColor,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500),
-                                  softWrap: true,
-                                )
-                              ]),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text("Item List",
-                    style: TextStyle(fontWeight: FontWeight.w600)),
-              ),
-              ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: productList.length,
-                  itemBuilder: (context, position) {
-                    return Container(
-                      padding: const EdgeInsets.all(10),
-                      child: Text(
-                        productList[position],
-                        style: const TextStyle(fontWeight: FontWeight.w500),
+                                      fontWeight: FontWeight.w500))
+                            ],
+                          ),
+                          const Spacer(),
+                        ],
                       ),
-                    );
-                  })
-            ]),
+                      20.0.vSpace(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "From",
+                                    style: TextStyle(fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    "${controller.freightList[widget.selectedIndex!].originLocation}",
+                                    style: const TextStyle(
+                                        color: AppColors.greyColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500),
+                                    softWrap: true,
+                                  )
+                                ]),
+                          ),
+                          50.0.hSpace(),
+                          Expanded(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("To",
+                                      style:
+                                          TextStyle(fontWeight: FontWeight.w500)),
+                                  Text(
+                                    "${controller.freightList[widget.selectedIndex!].destinationLocation}",
+                                    style: const TextStyle(
+                                        color: AppColors.greyColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500),
+                                    softWrap: true,
+                                  )
+                                ]),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text("Item List",
+                      style: TextStyle(fontWeight: FontWeight.w600)),
+                ),
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: productList.length,
+                    itemBuilder: (context, position) {
+                      return Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          productList[position],
+                          style: const TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                      );
+                    })
+              ]),
+            ),
           )
         ],
       ),

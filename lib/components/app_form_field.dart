@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:form_validation/form_validation.dart';
 
 class AppFormField extends StatelessWidget {
@@ -21,6 +22,7 @@ class AppFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      obscureText: inputType == TextInputType.visiblePassword,
       validator: (value) {
         switch (inputType) {
           case TextInputType.emailAddress:

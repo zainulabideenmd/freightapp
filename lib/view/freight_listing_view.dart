@@ -53,105 +53,110 @@ class _FreightListingViewState extends State<FreightListingView> {
         ),
       ),
       body: Obx(
-            () => ListView.builder(
-            shrinkWrap: true,
-            itemCount: controller.freightList.length,
-            itemBuilder: (context, position) {
-              return InkWell(
-                key: ValueKey("item->$position"),
-                onTap: (){
-                  Navigator.push(
-                      context,
-                  MaterialPageRoute(builder:(context) => FreightDetailView(selectedIndex: position,)));
-                  // AppRoutes.go(AppRouteName.freightDetailView,arguments: {"selectedIndex":position});
-                },
-                child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  padding: const EdgeInsets.all(10),
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [BoxShadow(color: AppColors.shadowColor)]),
-                  child: Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            AppImages.packageBoxSvg,
-                            width: 50,
-                          ),
-                          AppSpacing.vs10.hSpace(),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "#${controller.freightList[position].bookingId}",
-                                style: const TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                  "${controller.freightList[position].currentStatus} * ${controller.freightList[position].actualEta}",
+            () => RefreshIndicator(
+              onRefresh: () async {
+                controller.getFreightList();
+              },
+              child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: controller.freightList.length,
+              itemBuilder: (context, position) {
+                return InkWell(
+                  key: ValueKey("item->$position"),
+                  onTap: (){
+                    Navigator.push(
+                        context,
+                    MaterialPageRoute(builder:(context) => FreightDetailView(selectedIndex: position,)));
+                    // AppRoutes.go(AppRouteName.freightDetailView,arguments: {"selectedIndex":position});
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [BoxShadow(color: AppColors.shadowColor)]),
+                    child: Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              AppImages.packageBoxSvg,
+                              width: 50,
+                            ),
+                            AppSpacing.vs10.hSpace(),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "#${controller.freightList[position].bookingId}",
                                   style: const TextStyle(
-                                      color: AppColors.greyColor,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500))
-                            ],
-                          ),
-                          const Spacer(),
-                          SvgPicture.asset(AppImages.chevronSvg)
-                        ],
-                      ),
-                      20.0.vSpace(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "From",
-                                    style: TextStyle(fontWeight: FontWeight.w500),
-                                  ),
-                                  Text(
-                                    "${controller.freightList[position].originLocation}",
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: AppColors.greyColor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500),
-                                    softWrap: true,
-                                  )
-                                ]),
-                          ),
-                          50.0.hSpace(),
-                          Expanded(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text("To",
-                                      style:
-                                      TextStyle(fontWeight: FontWeight.w500)),
-                                  Text(
-                                    overflow: TextOverflow.ellipsis,
-                                    "${controller.freightList[position].destinationLocation}",
+                                      fontSize: 14, fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                    "${controller.freightList[position].currentStatus} * ${controller.freightList[position].actualEta}",
                                     style: const TextStyle(
                                         color: AppColors.greyColor,
                                         fontSize: 12,
-                                        fontWeight: FontWeight.w500),
-                                    softWrap: true,
-                                  )
-                                ]),
-                          )
-                        ],
-                      )
-                    ],
+                                        fontWeight: FontWeight.w500))
+                              ],
+                            ),
+                            const Spacer(),
+                            SvgPicture.asset(AppImages.chevronSvg)
+                          ],
+                        ),
+                        20.0.vSpace(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "From",
+                                      style: TextStyle(fontWeight: FontWeight.w500),
+                                    ),
+                                    Text(
+                                      "${controller.freightList[position].originLocation}",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: AppColors.greyColor,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500),
+                                      softWrap: true,
+                                    )
+                                  ]),
+                            ),
+                            50.0.hSpace(),
+                            Expanded(
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text("To",
+                                        style:
+                                        TextStyle(fontWeight: FontWeight.w500)),
+                                    Text(
+                                      overflow: TextOverflow.ellipsis,
+                                      "${controller.freightList[position].destinationLocation}",
+                                      style: const TextStyle(
+                                          color: AppColors.greyColor,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500),
+                                      softWrap: true,
+                                    )
+                                  ]),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+            ),
       ),
     );
   }

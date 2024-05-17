@@ -47,6 +47,7 @@ class FreightListController extends GetxController {
     try {
       var resp = Data.fromJson(data);
       if (resp.success == true) {
+        freightList.clear();
         freightList.addAll(resp.result?.data ?? []);
         freightList.refresh();
       }
